@@ -1,0 +1,17 @@
+#开发环境配置
+spring:
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/myblog?useUnicode=true&characterEncoding=utf-8&serverTimezone=UTC
+    username: root
+    password: 123456
+  jpa:
+    hibernate:
+      ddl-auto: update #将数据库表结构与实体类同步，还可以设置为none和create；当设置为create时，则每次运行服务都重新创建数据库表
+    show-sql: true  #在控制台和日志中输出sql语句
+logging:
+  level:
+    root: info #设置全局日志级别，此处默认为info,生产环境可设置为更高级别的warn
+    com.xsh: debug #指定对应目录的日志级别，在此目录内的日志级别为debug
+
+  file: log/blog-dev.log #设置日志存放目录

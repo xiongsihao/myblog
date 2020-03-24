@@ -1,0 +1,9 @@
+${AnsiColor.BRIGHT_BLUE}
+          '\\  //` .|'''|  '||  ||`     '||'''|,         '||`
+            \\//   ||       ||  ||       ||   ||          ||
+             ><    `|'''|,  ||''||       ||;;;;   .|''|,  ||  .|''|,
+            //\\    .   ||  ||  ||       ||   ||  ||  ||  ||  ||  ||
+          .//  \\.  |...|' .||  ||.     .||...|'  `|..|' .||. `|..||
+                                    ....                          ||
+${AnsiColor.BRIGHT_YELLOW}
+::: Project (version:${application.version}) :::              Spring-Boot ${spring-boot.version}                                                               `..|'

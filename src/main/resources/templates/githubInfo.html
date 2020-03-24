@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head  th:replace="_fragments :: head(~{::title})">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Github资料信息</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/semantic-ui/2.2.4/semantic.min.css">
+    <link rel="stylesheet" href="../static/css/me.css">
+    <style>
+        .myHideStyle{
+            display: none !important;
+        }
+        .myShowStyle{
+            display: inline-block !important;
+        }
+    </style>
+</head>
+<link rel="stylesheet" href="../static/css/dropzone.min.css" th:href="@{/css/dropzone.min.css}"/>
+<link rel="stylesheet" href="../static/css/basic.min.css" th:href="@{/css/basic.min.css}"/>
+<link rel="stylesheet" href="../static/css/file_window.css" th:href="@{/css/file_window.css}"/>
+<script src="/js/dropzone.min.js"></script>
+<script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+<body>
+<!--自定义弹窗:上传头像窗口-->
+<div class="widget widget1"  id="window" hidden="hidden">
+    <div class="body">
+        <div class="msg">上传新头像</div>
+        <div id="dropz" class="dropzone"></div>
+        <div class="btns">
+            <a href="javascript:void(0);" class="btn-cancel" id="btn_cancel">取 消</a>
+            <a href="javascript:void(0);" class="btn-confirm" id="btn_ok">上 传</a>
+        </div>
+    </div>
+</div>
+<!--导航-->
+<div class="ui inverted attached segment m-padded-tb-mini m-shadow-small" >
+    <div class="ui container">
+        <div class="ui inverted secondary stackable menu">
+            <h2 class="ui teal header item" title="个人博客">XSH_Blog</h2>
+            <a href="#" target="_blank" th:href="@{/}" class="m-item item m-mobile-hide " th:classappend="${n==1} ? 'active'"><i class="mini home icon"></i>&nbsp;首页</a>
+            <a href="#" target="_blank" th:href="@{/types/-1}" class="m-item item m-mobile-hide" th:classappend="${n==2} ? 'active'"><i class="mini idea icon"></i>分类</a>
+            <a href="#" target="_blank" th:href="@{/tags/-1}" class="m-item item m-mobile-hide" th:classappend="${n==3} ? 'active'"><i class="mini tags icon"></i>&nbsp;标签</a>
+            <a href="#" target="_blank" th:href="@{/archives}" class="m-item item m-mobile-hide" th:classappend="${n==4} ? 'active'"><i class="mini clone icon"></i>&nbsp;归档</a>
+            <a href="#" target="_blank" th:href="@{/Messages}" class="m-item item m-mobile-hide" th:classappend="${n==5} ? 'active'"><i class="mini envelope outline icon"></i>&nbsp;留言</a>
+            <a href="#" target="_blank" th:href="@{/about}" class="m-item item m-mobile-hide" th:classappend="${n==6} ? 'active'"><i class="mini info icon"></i>关于我</a>
+            <a href="http://music.xiongsihao.com" class="m-item item m-mobile-hide" th:classappend="${n==7} ? 'active'"><i class="mini music icon"></i>&nbsp;在线音乐</a>
+            <a href="http://netdisk.xiongsihao.com" class="m-item item m-mobile-hide" th:classappend="${n==8} ? 'active'"><i class="mini save icon"></i>&nbsp;云盘</a>
+            <!--            <a href="#" target="_blank" th:href="@{/admin}" class="m-item item m-mobile-hide" th:classappend="${n==7} ? 'active'"><i class="mini user secret icon"></i>后台管理</a>-->
+            <div class="right m-item item m-mobile-hide">
+                <form name="search" action="#" th:action="@{/search}" method="post" target="_blank">
+                    <div class="ui icon inverted  input m-margin-tb-tiny">
+                        <input type="text" name="query" placeholder="Search...." th:value="${query}">
+                        <i onclick="document.forms['search'].submit()" class="search link icon"></i>
+                    </div>
+                </form>
+            </div>
+
+            <div class="right m-item m-mobile-hide item" >
+                <div th:classappend="${session.loginStatus}?'myHideStyle':'myShowStyle'">
+                    <a href="#"  th:href="@{/qq/oauth}" style="width:80px; text-align:center"><i class="mini qq icon"></i>QQ登录&nbsp;|</a>
+                    <a href="#"  th:href="@{/github/oauth}" style="width:80px; text-align:center"><i class="github icon"></i>github登录&nbsp;|</a>
+                    <a href="#" target="_blank" th:href="@{/admin}" style="width:80px; text-align:center"><i class="mini user secret icon"></i>&nbsp;后台管理</a>
+                </div>
+
+                <div class="ui dropdown item" th:classappend="${session.loginStatus}?'myShowStyle':'myHideStyle'">
+                    <div class="text">
+                        <img class="ui avatar image" th:src="${session.avatar}">
+                        <span th:text="${session.nickname}">Xiong_sh</span>
+                    </div>
+                    <i class="dropdown icon"></i>
+                    <div class="menu" th:if="${session.loginType == 1}">
+                        <a href="#" th:href="@{/qqinfo}" class="item">QQ资料</a>
+                        <a href="#" th:href="@{/qqlogout}" class="item">退出登录</a>
+                    </div>
+                    <div class="menu" th:if="${session.loginType == 2}">
+                        <a href="#" th:href="@{/githubInfo}" class="item">Github资料</a>
+                        <a href="#" th:href="@{/githublogout}" class="item">退出登录</a>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <a href="#" class="ui menu toggle black icon button m-right-top m-mobile-show">
+        <i class="sidebar icon"></i>
+    </a>
+</div>
+
+<script src="http://pv.sohu.com/cityjson?ie=utf-8"></script>
+
+<!--中间内容-->
+<div  class="m-container m-padded-tb-big animated fadeIn">
+    <div class="ui container">
+        <div id="qqInfo" class="ui stackable grid">
+            <div class="eleven wide column">
+                <table class="ui celled table">
+                    <tbody>
+                        <tr>
+                            <td data-label="loginTimeDesc" nowrap="value"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">首次登录时间</font></font></td>
+                            <td data-label="loginTime"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">firstLoginTime</font></font></td>
+                            <td data-label="loginTimeValue"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">[[${github.loginTime}]]</font></font></td>
+                        </tr>
+                        <tr>
+                            <td data-label="nowTimeDesc" nowrap="value"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">当前时间</font></font></td>
+                            <td data-label="nowTime"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">nowTime</font></font></td>
+                            <td data-label="nowTimeValue"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;"><script type="text/javascript">document.write(new Date())</script></font></font></td>
+                        </tr>
+                        <tr>
+                            <td data-label="nowTimeDesc" nowrap="value"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">github账号id</font></font></td>
+                            <td data-label="nowTime"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">id</font></font></td>
+                            <td data-label="nowTimeValue"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">[[${github.githubId}]]</font></font></td>
+                        </tr>
+                        <tr>
+                            <td data-label="nowTimeDesc" nowrap="value"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">账号唯一标识</font></font></td>
+                            <td data-label="nowTime"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">node_id</font></font></td>
+                            <td data-label="nowTimeValue"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">[[${github.nodeId}]]</font></font></td>
+                        </tr>
+                        <tr>
+                            <td data-label="nowTimeDesc" nowrap="value"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">创建github账号时间</font></font></td>
+                            <td data-label="nowTime"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">createdTime</font></font></td>
+                            <td data-label="nowTimeValue"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">[[${github.createdTime}]]</font></font></td>
+                        </tr>
+                        <tr>
+                            <td data-label="nowTimeDesc" nowrap="value"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">最后更新github时间</font></font></td>
+                            <td data-label="nowTime"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">updatedTime</font></font></td>
+                            <td data-label="nowTimeValue"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">[[${github.updatedTime}]]</font></font></td>
+                        </tr>
+                        <tr>
+                            <td data-label="nowTimeDesc" nowrap="value"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">账号名</font></font></td>
+                            <td data-label="nowTime"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">nickname</font></font></td>
+                            <td data-label="nowTimeValue"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">[[${github.nickname}]]</font></font></td>
+                        </tr>
+                        <tr>
+                            <td data-label="nowTimeDesc" nowrap="value"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">公有仓库数量</font></font></td>
+                            <td data-label="nowTime"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">publicRepos</font></font></td>
+                            <td data-label="nowTimeValue"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">[[${github.publicRepos}]]</font></font></td>
+                        </tr>
+                        <tr>
+                            <td data-label="nowTimeDesc" nowrap="value"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">仓库详细信息</font></font></td>
+                            <td data-label="nowTime"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">subscriptions</font></font></td>
+                            <td data-label="nowTimeValue"><a target="_blank" th:href="${github.subscriptions}">点击查看</a></td>
+                        </tr>
+                        <tr>
+                            <td data-label="nowTimeDesc" nowrap="value"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">操作详细信息url</font></font></td>
+                            <td data-label="nowTime"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">receivedEventsUrl</font></font></td>
+                            <td data-label="nowTimeValue"><a target="_blank" th:href="${github.receivedEventsUrl}">点击查看</a></td>
+                        </tr>
+                        <tr>
+                            <td data-label="nowTimeDesc" nowrap="value"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">用户首页</font></font></td>
+                            <td data-label="nowTime"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">indexUrl</font></font></td>
+                            <td data-label="nowTimeValue"><a target="_blank" th:href="${github.indexUrl}">点击跳转</a></td>
+                        </tr>
+                        <tr>
+                            <td data-label="nowTimeDesc" nowrap="value"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">IP地址</font></font></td>
+                            <td data-label="nowTime"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">cip</font></font></td>
+                            <td data-label="nowTimeValue"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;"><script type="text/javascript">document.write(returnCitySN["cip"])</script></font></font></td>
+                        </tr>
+                        <tr>
+                            <td data-label="nowTimeDesc" nowrap="value"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">地区编号</font></font></td>
+                            <td data-label="nowTime"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">cid</font></font></td>
+                            <td data-label="nowTimeValue"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;"><script type="text/javascript">document.write(returnCitySN["cid"])</script></font></font></td>
+                        </tr>
+                        <tr>
+                            <td data-label="nowTimeDesc" nowrap="value"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">所在地</font></font></td>
+                            <td data-label="nowTime"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">cname</font></font></td>
+                            <td data-label="nowTimeValue"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;"><script type="text/javascript">document.write(returnCitySN["cname"])</script></font></font></td>
+                        </tr>
+                        <tr>
+                            <td data-label="userAgentDesc" nowrap="value"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">设备信息</font></font></td>
+                            <td data-label="userAgent"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">userAgent</font></font></td>
+                            <td data-label="userAgentValue"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;"><script type="text/javascript">document.write(navigator.userAgent)</script></font></font></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div id="avatarDiv" class="five wide column" style="/*text-align:center;*/ vertical-align: middle;">
+                <div id="avatarSmallDiv">
+                    <img  width="400" height="400" class="ui  circular image" th:src="${session.avatar}" src="http://cdn.xiongsihao.com/GithubAvatar13.png">
+                </div>
+                <br><br>
+                <button id="rollback" class="ui inverted blue button m-mobile-wide"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;"><i class=" image outline icon"></i>点击修改头像</font></font></button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<br>
+<br>
+<!--底部footer-->
+<footer th:replace="_fragments :: footer" class="ui inverted vertical segment m-padded-tb-massive">
+    <div class="ui center aligned container">
+        <div class="ui inverted divided stackable grid">
+            <div class="three wide column">
+                <div class="ui inverted link list">
+                    <div class="item">
+                        <img src="../static/images/wechat.jpg" class="ui rounded image" alt="" style="width: 110px">
+                    </div>
+                </div>
+            </div>
+            <div class="three wide column">
+                <h4 class="ui inverted header m-text-thin m-text-spaced " >最新博客</h4>
+                <div class="ui inverted link list">
+                    <a href="#" class="item m-text-thin">用户故事（User Story）</a>
+                    <a href="#" class="item m-text-thin">用户故事（User Story）</a>
+                    <a href="#" class="item m-text-thin">用户故事（User Story）</a>
+                </div>
+            </div>
+            <div class="three wide column">
+                <h4 class="ui inverted header m-text-thin m-text-spaced ">联系我</h4>
+                <div class="ui inverted link list">
+                    <a href="#" class="item m-text-thin">Email：xsh2668028614@qq.com</a>
+                    <a href="#" class="item m-text-thin">QQ：2668028614</a>
+                </div>
+            </div>
+            <div class="seven wide column">
+                <h4 class="ui inverted header m-text-thin m-text-spaced ">Blog</h4>
+                <p class="m-text-thin m-text-spaced m-opacity-mini">这是我的个人博客、记录学习进度和关于编程、写作、思考相关的任何内容...</p>
+            </div>
+        </div>
+        <div class="ui inverted section divider"></div>
+        <p class="m-text-thin m-text-spaced m-opacity-tiny">Copyright © 2016 - 2017 Xiong_sh Designed by Xiong_sh</p>
+    </div>
+
+</footer>
+<!--/*/<th:block th:replace="_fragments :: script">/*/-->
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.2/dist/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/semantic-ui/2.2.4/semantic.min.js"></script>
+<!--/*/</th:block>/*/-->
+<script>
+    $('.ui.dropdown').dropdown({
+        on: 'hover'
+    });
+
+    /*提交ip等信息*/
+    onload = function (){
+        $.ajax({
+            cache:true,//保留缓存数据
+            type:"POST",//为post请求
+            url:"/saveIp",
+            data:{
+                "cip" : returnCitySN["cip"],
+                "cid" : returnCitySN['cid'],
+                "cname" : returnCitySN["cname"],
+            },
+            async:true,//设置成true，这标志着在请求开始后，其他代码依然能够执行。如果把这个选项设置成false，这意味着所有的请求都不再是异步的了，这也会导致浏览器被锁死
+            error:function(request){//请求失败之后的操作
+                alert("服务器出现了一个未知的错误");
+            },
+            success:function(data){//请求成功之后的操作
+                console.log("success");
+            }
+        });
+    }
+</script>
+<!--处理上传图片-->
+<script>
+    var myDropzone = new Dropzone("#dropz", {
+        url: "/upload/uploadGithubImg",
+        dictDefaultMessage: '拖动图片文件至此或者点击上传',
+        dictFileTooBig:"上传文件过大！",
+        dictMaxFilesExceeded:'请勿上传多张照片',
+        dictInvalidInputType:'请上传.jpg,.jpeg,.png格式图片',
+        autoProcessQueue:false,
+        paramName: "file", // 传到后台的参数名称
+        maxFiles:1,//最多上传数量
+        maxFilesize:10,
+        acceptedFiles: ".jpg,.jpeg,.png",//支持文件格式
+        init: function () {
+            var myDropzone = this;
+            myDropzone.on("success", function (file, data) {
+                // 上传成功触发的事件
+                //alert("上传成功");
+                alert("Github头像更新成功，新头像外链为：【"+data.url+"】");
+                location.reload();//刷新页面获取新头像
+                console.log("Github头像更新成功，头像外链："+data.url);
+            });
+            myDropzone.on('error', function (files, response) {
+                alert("服务器错误，文件上传失败，请刷新重试！");
+            });
+        }
+    });
+</script>
+<script type="text/javascript">
+    $(function(){
+        $('#rollback').click(function(){
+            $('#window').removeAttr('hidden');
+        })
+        //确认
+        $('#btn_ok').click(function(){
+            $('#window').attr('hidden','hidden');
+            myDropzone.processQueue();
+        })
+        $('#btn_cancel').click(function(){
+            $('#window').attr('hidden','hidden');
+            myDropzone.removeAllFiles();
+        })
+    })
+</script>
+
+</body>
+</html>

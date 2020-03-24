@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head th:replace="_fragments :: head(~{::title})">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>留言板</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/semantic-ui/2.2.4/semantic.min.css">
+    <link rel="stylesheet" href="../static/css/me.css">
+</head>
+<body>
+
+<!--导航-->
+<nav th:replace="_fragments :: menu(5)" class="ui inverted attached segment m-padded-tb-mini m-shadow-small" >
+    <div class="ui container">
+        <div class="ui inverted secondary stackable menu">
+            <h2 class="ui teal header item">Blog</h2>
+            <a href="#" class=" m-item item m-mobile-hide"><i class="mini home icon"></i>首页</a>
+            <a href="#" class="m-item item m-mobile-hide"><i class="mini idea icon"></i>分类</a>
+            <a href="#" class=" m-item item m-mobile-hide"><i class="mini tags icon"></i>标签</a>
+            <a href="#" class="active m-item item m-mobile-hide"><i class="mini clone icon"></i>归档</a>
+            <a href="#" class="m-item item m-mobile-hide"><i class="mini info icon"></i>关于我</a>
+            <div class="right m-item item m-mobile-hide">
+                <div class="ui icon inverted transparent input m-margin-tb-tiny">
+                    <input type="text" placeholder="Search....">
+                    <i class="search link icon"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+    <a href="#" class="ui menu toggle black icon button m-right-top m-mobile-show">
+        <i class="sidebar icon"></i>
+    </a>
+</nav>
+<link rel="stylesheet" href="../static/css/alert_window.css" th:href="@{/css/alert_window.css}"/>
+<!--中间内容-->
+<!--自定义弹窗-->
+<div class="widget widget1" id="window1" hidden="hidden">
+    <div class="body">
+        <div class="msg" style="color: red;font-size: 20px">提示</div>
+        <div style="height:20px"> </div>
+        <div class="msg"><b>留言信息不能为空!请确认后填写!</b></div>
+        <div class="btns">
+            <a href="javascript:void(0);" class="btn-confirm" id="btn_ok1">确 定</a>
+        </div>
+    </div>
+</div>
+<div class="widget widget1" id="window2" hidden="hidden">
+    <div class="body">
+        <div class="msg" style="color: red;font-size: 20px">提示</div>
+        <div style="height:20px"> </div>
+        <div class="msg"><b>请确保填入的邮箱正确！</b></div>
+        <div class="msg"><b>开启通知后，当留言被回复后你将收到一封邮件通知</b></div>
+        <div class="btns">
+            <a href="javascript:void(0);" class="btn-confirm" id="btn_ok2">确 定</a>
+        </div>
+    </div>
+</div>
+<div class="widget widget1" id="window3" hidden="hidden">
+    <div class="body">
+        <div class="msg" style="color: #2a2dff;font-size: 20px">提示</div>
+        <div style="height:20px"> </div>
+        <div class="msg"><b>请输入手机号</b></div>
+        <form class="">
+            <div class="">
+                <input id="phoneNum" type="text" placeholder="请输入手机号...." maxlength="11">
+            </div>
+        </form>
+        <div id="warning" hidden="hidden" style="color: red">请填写正确的手机号</div>
+        <div class="btns">
+            <a href="javascript:void(0);" class="btn-cancel" id="btn_cancel3">取 消</a>
+            <a href="javascript:void(0);" class="btn-confirm" id="btn_ok3">发 送</a>
+        </div>
+    </div>
+</div>
+<div class="m-container m-padded-tb-big" style="min-height: 85%">
+    <div class="ui container">
+        <!--留言区域-->
+        <div class="ui bottom attached segment">
+            <h2 class="ui dividing teal header">留言</h2>
+            <div id="message-form" class="ui teal form">
+                <!--留言板，可编辑div-->
+                <div  id="commentEditor" class="fields error" contenteditable="true" data-placeholder="请输入留言信息..."></div>
+
+                <div class="fields">
+                    <!--表情按钮-->
+                    <div class="field m-mobile-wide m-margin-bottom-small" data-tooltip="表情未加载完全或点击无响应可刷新页面重试">
+                        <button id="emojiBtn" type="button" class="ui yellow button m-mobile-wide"><i class="large smile outline icon"></i>表情</button>
+                    </div>
+
+                    <div class="field m-mobile-wide m-margin-bottom-small">
+                        <div class="ui left icon input">
+                            <i class="user icon"></i>
+                            <input type="text" name="nickname" placeholder="姓名" th:value="${session.nickname}!=null ? ${session.nickname}">
+                        </div>
+                    </div>
+                    <div class="field m-mobile-wide m-margin-bottom-small">
+                        <div class="ui left icon input">
+                            <i class="mail icon"></i>
+                            <input type="text" name="email" placeholder="邮箱" th:value="${session.user}!=null ? ${session.user.email}">
+                        </div>
+                    </div>
+                    <div class="field m-mobile-wide m-margin-bottom-small" data-tooltip="点击选择是否开启留言回复通知">
+                        <div id="open-mail" name="open-mail" class="ui toggle checkbox">
+                            <div style="height:10px"> </div>
+                            <input type="checkbox" tabindex="0" class="hidden" />
+                            <label>回复通知</label>
+                        </div>
+                    </div>
+                    <div class="field  m-margin-bottom-small m-mobile-wide">
+                        <button id="commentpost-btn" type="button" class="ui teal button m-mobile-wide"><i class="large edit icon"></i>发布</button>
+                    </div>
+
+                    <div class="field  m-margin-bottom-small m-mobile-wide" data-tooltip="还没做这个功能....有时间再做">
+                        <button id="bindEmail" type="button" class="ui green  button m-mobile-wide"><i class="large envelope outline  icon"></i>邮箱绑定</button>
+                    </div>
+
+                    <div class="field  m-margin-bottom-small m-mobile-wide" data-tooltip="手机验证码发送demo，仅做测试使用不存储手机号！">
+                        <button id="CodeDemo" type="button" class="ui violet  button m-mobile-wide"><i class="large mobile  icon"></i>demo</button>
+                    </div>
+                </div>
+                <div class="ui error message"></div>
+            </div>
+            <input type="hidden" name="parentMessage.id" value="-1">
+            <!--留言列表-->
+            <div id="message-container" class="ui teal segment" >
+                <div th:fragment="messageList">
+                    <div class="ui threaded comments" style="max-width: 100%;">
+
+                        <div class="comment" th:each="message : ${messages.content}" th:if="!${message.parentMessage}">
+                                <a class="avatar">
+                                    <img th:src="@{${message.avatar}}" src="/images/avatar.png">
+                                </a>
+                                <div class="content">
+                                    <a class="author">
+                                        <span th:text="${message.nickname}">XSH</span>
+                                        <div class="ui mini basic adminComment left pointing label m-padded-mini" th:if="${message.adminMessage}==2">博主</div>
+                                        <span class="ui mini basic visitComment left pointing label m-padded-mini" th:if="${message.adminMessage}==1">访客</span>
+                                        <span class="ui mini basic touristComment left pointing label m-padded-mini" th:if="${message.adminMessage}==0">游客</span>
+                                        <span class="ui small basic githubComment left pointing label m-padded-mini" th:if="${message.adminMessage}==3">gayhub</span>
+                                    </a>
+                                    <div class="metadata">
+                                        <span class="date" th:text="${#dates.format(message.createTime,'yyyy-MM-dd HH:mm:ss')}">2020-03-17 22:54</span>
+                                    </div>
+                                    <div id="messageText" class="text" th:utext="${message.content}">1234567890</div>
+                                    <div class="actions">
+                                        <a class="reply" data-messageid="1" data-messagenickname="Matt" th:attr="data-messageid=${message.id},data-messagenickname=${message.nickname}" onclick="reply(this)">回复</a>
+                                    </div>
+                                </div>
+
+                            <div class="comments" th:if="${#arrays.length(message.replyMessages)}>0">
+                                <div class="comment" th:each="reply : ${message.replyMessages}">
+                                    <a class="avatar">
+                                        <img src="https://unsplash.it/100/100?image=1005" th:src="@{${reply.avatar}}">
+                                    </a>
+                                    <div class="content">
+                                        <a class="author" >
+                                            <span th:text="${reply.nickname}">小红</span>
+                                            <div class="ui mini basic adminComment left pointing label m-padded-mini" th:if="${reply.adminMessage}==2">博主</div>
+                                            <span class="ui mini basic visitComment left pointing label m-padded-mini" th:if="${reply.adminMessage}==1">访客</span>
+                                            <span class="ui mini basic touristComment left pointing label m-padded-mini" th:if="${reply.adminMessage}==0">游客</span>
+                                            <span class="ui small basic githubComment left pointing label m-padded-mini" th:if="${message.adminMessage}==3">gayhub</span>
+                                            &nbsp;<span th:text="|@ ${reply.parentMessage.nickname}|" class="m-teal">@ 小白</span>
+                                        </a>
+                                        <div class="metadata">
+                                            <span class="date" th:text="${#dates.format(reply.createTime,'yyyy-MM-dd HH:mm')}">Today at 5:42PM</span>
+                                        </div>
+                                        <div id="replyCommentText" class="text" th:utext="${reply.content}">
+                                            How artistic!
+                                        </div>
+                                        <div class="actions">
+                                            <a class="reply" data-messageid="1" data-messagenickname="Matt" th:attr="data-messageid=${reply.id},data-messagenickname=${reply.nickname}" onclick="reply(this)">回复</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!--分页组件-->
+                    <div class="ui center aligned segment">
+                        <div class="ui pagination menu">
+                            <a class="item active teal" href="/Messages?page=1">
+                                首页
+                            </a>
+                            <a class="item" th:if="${a}" th:href="@{/Messages?page={num}(num=${messages.number})}" href="/Messages?page=2">
+                                上一页
+                            </a>
+                            <a class="item">
+                                当前第<h3 class="ui orange header m-inline-block m-text-thin" th:text="${messages.number}+1">1</h3>页
+                            </a>
+                            <a class="item" th:if="${b}" th:href="@{/Messages?page={num}(num=${messages.number}+2)}" href="/Messages?page=2">
+                                下一页
+                            </a>
+                            <a class="item" th:href="@{/Messages?page={num}(num=${messages.totalPages})}" href="/Messages?page=2">
+                                尾页
+                            </a>
+                            <a class="item">
+                                共<h3 class="ui red header m-inline-block m-text-thin" th:text="${messages.totalPages}">20</h3>页
+                            </a>
+                            <a class="item">
+                                共<h3 class="ui red header m-inline-block m-text-thin" th:text="${messages.totalElements}">200</h3>条
+                            </a>
+                            <form name="pageForm" class="right item" action="/Messages" method="get">
+                                <div class="ui right labeled input">
+                                    <div class="ui basic label">Go</div>
+                                    <input type="text" name="page" placeholder="页码..."
+                                           style="width: 80px;">
+                                    <div class="ui basic label">页</div>
+                                    <button class="ui icon button"><i onclick="document.forms[('page'-1)].submit()"
+                                                                      class="right arrow icon"></i></button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<br>
+<br>
+<!--底部footer-->
+<footer th:replace="_fragments :: footer" class="ui inverted vertical segment m-padded-tb-massive">
+    <div class="ui center aligned container">
+        <div class="ui inverted divided stackable grid">
+            <div class="three wide column">
+                <div class="ui inverted link list">
+                    <div class="item">
+                        <img src="../static/images/wechat.jpg" class="ui rounded image" alt="" style="width: 110px">
+                    </div>
+                </div>
+            </div>
+            <div class="three wide column">
+                <h4 class="ui inverted header m-text-thin m-text-spaced " >最新博客</h4>
+                <div class="ui inverted link list">
+                    <a href="#" class="item m-text-thin">用户故事（User Story）</a>
+                    <a href="#" class="item m-text-thin">用户故事（User Story）</a>
+                    <a href="#" class="item m-text-thin">用户故事（User Story）</a>
+                </div>
+            </div>
+            <div class="three wide column">
+                <h4 class="ui inverted header m-text-thin m-text-spaced ">联系我</h4>
+                <div class="ui inverted link list">
+                    <a href="#" class="item m-text-thin">Email：xsh2668028614@qq.com</a>
+                    <a href="#" class="item m-text-thin">QQ：2668028614</a>
+                </div>
+            </div>
+            <div class="seven wide column">
+                <h4 class="ui inverted header m-text-thin m-text-spaced ">Blog</h4>
+                <p class="m-text-thin m-text-spaced m-opacity-mini">这是我的个人博客、记录学习进度和关于编程、写作、思考相关的任何内容...</p>
+            </div>
+        </div>
+        <div class="ui inverted section divider"></div>
+        <p class="m-text-thin m-text-spaced m-opacity-tiny">Copyright © 2016 - 2017 Xiong_sh Designed by Xiong_sh</p>
+    </div>
+
+</footer>
+<!--/*/<th:block th:replace="_fragments :: script">/*/-->
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.2/dist/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/semantic-ui/2.2.4/semantic.min.js"></script>
+<!--/*/</th:block>/*/-->
+<script th:inline="javascript">
+    onload = function () {
+        $("#commentEditor").emoji({
+            button: "#emojiBtn",
+            showTab: false,
+            animation: 'slide',
+            basePath: '/images/emoji',
+            icons: emojiLists
+        });
+
+        $("#messageText").emojiParse({
+            basePath: '/images/emoji',
+            icons: emojiLists
+        });
+    }
+</script>
+<script>
+    $('.menu.toggle').click(function () {
+        $('.m-item').toggleClass('m-mobile-hide');
+    });
+
+    function postData() {
+        $.ajax({
+            cache:true,//保留缓存数据
+            type:"POST",
+            url:"/POSTMessages",
+            data:{
+                "parentMessage.id" : $("[name='parentMessage.id']").val(),
+                //"openid" : $("[name='openidValue']").val(),
+                "nickname": $("[name='nickname']").val(),
+                "email"   : $("[name='email']").val(),
+                "content" : document.getElementById("commentEditor").innerHTML,
+                "replyInform" : $("[name='open-mail']").hasClass("checked") ? true : false
+            },
+            async:true,//异步
+            error:function(request){
+                alert("服务器出现了一个未知的错误");
+            },
+            success:function(data){
+                clearContent();
+                $("#message-container").load("/Message");//刷新数据
+            }
+        });
+    }
+    function reply(obj) {
+        var messageId = $(obj).data('messageid');
+        var messageNickname = $(obj).data('messagenickname');
+        $("[id='commentEditor']").attr("data-placeholder", "@"+messageNickname);
+        $("[name='parentMessage.id']").val(messageId);
+        $(window).scrollTo($('#message-form'),500);
+    }
+
+    function clearContent() {
+        $("[name='parentMessage.id']").val(-1);
+        document.getElementById("commentEditor").innerText='';
+        $("[id='commentEditor']").attr("data-placeholder", "请输入留言信息...");
+    }
+
+
+    $('#commentpost-btn').click(function () {
+        var boo = $('.ui.form').form('validate form');
+        var text = document.getElementById("commentEditor").innerHTML;
+        if (boo && text!="") {
+            console.log('校验成功');
+            postData();
+        } else if(text == ""){
+            console.log('留言数据校验不通过');
+            $('#window1').removeAttr('hidden');
+            return;
+        }
+    });
+
+
+    //评论表单验证
+    $('.ui.form').form({
+        fields: {
+            content: {
+                identifier: 'nickname',
+                rules: [{
+                    type: 'empty',
+                    prompt: '请输入你的大名'
+                }]
+            },
+            type: {
+                identifier: 'email',
+                rules: [{
+                    type: 'email',
+                    prompt: '请填写正确的邮箱地址'
+                }]
+            }
+        }
+    });
+
+    $(function(){
+        //确认
+        $('#btn_ok1').click(function(){
+            $('#window1').attr('hidden','hidden');
+        });
+        $('#btn_ok2').click(function(){
+            $('#window2').attr('hidden','hidden');
+        });
+
+        $('#btn_ok3').click(function(){
+            var phone = document.getElementById('phoneNum').value;
+            if(localStorage.getExpire("phoneNum")==phone){
+                alert("当前手机号一小时内已发送过短信，请稍候再试......");
+                return false;
+            }
+            if(!(/^1[3456789]\d{9}$/.test(phone))){
+                //alert("手机号码有误，请重填");
+                $('#warning').removeAttr('hidden');
+                return false;
+            }
+            localStorage.setExpire('phoneNum',phone,3600000);//设置phoneNum过期时间为一小时，防止一个手机号频繁发送短信(因为demo只是做演示)
+            $.ajax({
+                type: "GET",
+                url: "/sendSms",
+                data: {phoneNum:phone},
+                dataType: "json",
+                success: function(data){
+                }
+            });
+
+            $('#window3').attr('hidden','hidden');
+            $('#warning').attr('hidden','hidden');
+            document.getElementById('phoneNum').value="";//清空手机号表单
+            alert("已向【"+phone+"】发送了一条短信，请注意查收！")
+        });
+
+        //取消
+        $('#btn_cancel3').click(function(){
+            $('#window3').attr('hidden','hidden');
+        })
+    });
+    $('.ui.checkbox').checkbox();
+
+    /*监听指定元素的class属性*/
+    $(document).ready(function(){
+        var targetNode = document.getElementById('open-mail');//获取监听元素
+        var config = { attributes: true };
+        var callback = function(mutationsList) {
+            for(var mutation of mutationsList) {
+                if (mutation.type == 'attributes') {
+                    if($(targetNode).hasClass("checked")){//当class属性改变时触发事件
+                        $('#window2').removeAttr('hidden');
+                    }
+                }
+            }
+        };
+        var observer = new MutationObserver(callback);
+        observer.observe(targetNode, config);
+    });
+
+    $('#CodeDemo').click(function () {
+        $('#window3').removeAttr('hidden');
+    });
+
+
+    /*实现localStorage设置过期时间*/
+    Storage.prototype.setExpire = (key, value, expire) => {
+        let obj = {
+            data: value,
+            time: Date.now(),
+            expire: expire
+        };
+        //localStorage 设置的值不能为对象,转为json字符串
+        localStorage.setItem(key, JSON.stringify(obj));
+    }
+
+    Storage.prototype.getExpire = key => {
+        let val = localStorage.getItem(key);
+        if (!val) {
+            return val;
+        }
+        val = JSON.parse(val);
+        if (Date.now() - val.time > val.expire) {
+            localStorage.removeItem(key);
+            return null;
+        }
+        return val.data;
+    }
+
+</script>
+</body>
+</html>

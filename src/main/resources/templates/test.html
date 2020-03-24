@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="UTF-8">
+  <title>查询结果</title>
+</head>
+<body>
+
+<table class="table" border="1px">
+  <tr th:each="item,userStat:${imageNames}">
+    <!--<td th:text="${userStat.index}+1"></td>--> <!-- index-->
+    <td th:text="${userStat.current.key}"></td><!-- key-->
+    <td th:text="${userStat.current.value}"></td><!-- value-->
+  </tr>
+</table>
+<span th:text="${repeatResult}"></span>
+
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.2/dist/jquery.min.js"></script>
+
+</body>
+</html>

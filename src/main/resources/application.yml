@@ -1,0 +1,101 @@
+spring:
+  thymeleaf:
+    mode: HTML
+#  mvc:
+#    favicon:
+#      enabled: false #关闭springBoot默认的网站小叶子图标
+  profiles:
+    active: dev  #指定使用的yml文件
+  messages:
+    basename: i18n/messages
+  rabbitmq:
+    host: 101.200.47.36
+    username: root
+    password: XXXXXX
+    virtual-host: /sms
+  redis:
+    host: 127.0.0.1
+  #邮件参数配置
+#  mail:
+#      # 163邮箱配置
+#      host: smtp.163.com
+#      port: 465
+#      username: xsh_blog@163.com
+#      password: XXXXXXX
+#      protocol: smtp
+#      default-encoding: UTF-8
+#      properties:
+#        mail:
+#          smtp:
+#            auth: true
+#            ssl:
+#              enable: true
+#            starttls:
+#              enable: true
+#              required: true
+  mail:
+    #QQ邮箱配置
+    port: 465
+    host: smtp.qq.com  #QQ邮箱服务器
+    username: xsh2668028614@qq.com  #发送者QQ邮箱
+    password: XXXXXXXX  #发送者QQ邮箱第三方授权码
+    default-encoding: UTF-8  #邮件编码类型
+    properties:
+      mail:
+        timeout:
+        smtp:
+          auth: true
+          ssl:
+            enable: true
+          starttls:
+            enable: true
+            required: true
+
+#mail.fromMail.addr: xsh_blog@163.com  #发送者网易邮箱
+mail.fromMail.addr: xsh2668028614@qq.com  #发送者QQ邮箱
+
+comment.avatar: http://xiongsihao.com/images/avatar.png  #游客默认头像
+
+#QQ登录后指定用户为管理员的依据，用来识别博主是谁
+admin.openid: F9F8E0C1E23D67668EFEF7A34B510F66
+
+cookie.time: 864000 #设置cookie的生命周期为十天，单位秒。 60*60*24*10
+# 分页配置
+#pagehelper:
+#  helper-dialect: mysql
+#  reasonable: true
+#  support-methods-arguments: true
+#  params:
+#    count: countSql
+
+server:
+  port: 80
+  #port: 82
+  session:
+    timeout: 864000 #session自动过期时间为10天，单位秒 60*60*24*10；记录登录状态
+
+#上传图片缓存路径，部署到linux需要换成linux路径并赋予读写权限
+baseUploadUrl: /usr/java/qiniu_temp/
+#baseUploadUrl: d://qiniu_temp/
+
+#QQ登录授权配置,QQ互联中提供的 appid 和 appkey
+qq:
+  oauth:
+    http: http://xiongsihao.com
+  appid: 101860754
+  appkey: XXXXXXXX
+
+#七牛云配置
+qiniu:
+  accessKey: Rfvis4b8vrumksgvb_RZLpwusVUDOTx_JQA66ihn
+  secretKey: XXXXXXXXXXXXXXXXXXXXX
+  bucket: xsh-blog
+  path: http://cdn.xiongsihao.com
+
+#短信相关配置
+sms:
+  accessKeyId: LTAI4Fku38EbzFCDdL9Sy6RD
+  accessKeySecret: XXXXXXXXXXXXXXXX
+  signName: X博客 # 签名名称
+  verifyCodeTemplate: SMS_183195163 # 模板名称
+
