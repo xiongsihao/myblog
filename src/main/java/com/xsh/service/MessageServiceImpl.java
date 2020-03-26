@@ -90,6 +90,7 @@ public class MessageServiceImpl implements MessageService{
         for (Message message : messages) {
             List<Message> replys1 = message.getReplyMessages();
             for(Message reply1 : replys1) {
+                tempReplys.add(reply1);//顶节点添加到临时存放集合
                 //循环迭代，找出子代，存放在tempReplys中
                 recursively(reply1);
             }
@@ -108,7 +109,6 @@ public class MessageServiceImpl implements MessageService{
      * @return
      */
     private void recursively(Message message) {
-        tempReplys.add(message);//顶节点添加到临时存放集合
         if (message.getReplyMessages().size()>0) {
             List<Message> replys = message.getReplyMessages();
             for (Message reply : replys) {

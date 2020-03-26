@@ -71,7 +71,7 @@ public class CommentServiceImpl implements CommentService{
         for (Comment comment : comments) {
             List<Comment> replys1 = comment.getReplyComments();
             for(Comment reply1 : replys1) {
-                //tempReplys.add(comment);
+                tempReplys.add(reply1);
                 //循环迭代，找出子代，存放在tempReplys中
                 recursively(reply1);
             }
@@ -90,7 +90,7 @@ public class CommentServiceImpl implements CommentService{
      * @return
      */
     private void recursively(Comment comment) {
-        tempReplys.add(comment);//顶节点添加到临时存放集合
+        //tempReplys.add(comment);//顶节点添加到临时存放集合
         if (comment.getReplyComments().size()>0) {
             List<Comment> replys = comment.getReplyComments();
             for (Comment reply : replys) {
