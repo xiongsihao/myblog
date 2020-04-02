@@ -102,12 +102,6 @@
             <artifactId>xwork-core</artifactId>
             <version>2.3.37</version>
         </dependency>
-        <!--JSONObject fromObject() 需要引入的包,用来格式化ip地址-->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-tomcat</artifactId>
-            <scope>provided</scope>
-        </dependency>
         <!-- https://mvnrepository.com/artifact/com.alibaba/fastjson -->
         <dependency>
             <groupId>com.alibaba</groupId>
