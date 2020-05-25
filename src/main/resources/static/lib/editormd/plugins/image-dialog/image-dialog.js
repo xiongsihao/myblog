@@ -81,25 +81,36 @@
                     },
                     buttons : {
                         enter : [lang.buttons.enter, function() {
-                            var url  = this.find("[data-url]").val();
-                            var alt  = this.find("[data-alt]").val();
-                            var link = this.find("[data-link]").val();
+                            var url  = this.find("[data-url]").val();//本地上传链接
+                            var alt  = this.find("[data-alt]").val();//图片描述
+                            var link = this.find("[data-link]").val();//图片链接
 
-                            if (url === "")
-                            {
+                            /*if (url === "") {
                                 alert(imageLang.imageURLEmpty);
                                 return false;
+                            }*/
+
+
+                            /*当图片地址和图片链接都为空时才提示错误信息*/
+                            if (url === ""){
+                                if(link === "" || link === "http://"){
+                                    alert(imageLang.imageURLEmpty);
+                                    return false;
+                                }
                             }
 
 							var altAttr = (alt !== "") ? " \"" + alt + "\"" : "";
 
-                            if (link === "" || link === "http://")
+                            if (link === "" || link === "http://")/*link为空，则上传的是本地图片*/
                             {
                                 cm.replaceSelection("![" + alt + "](" + url + altAttr + ")");
                             }
-                            else
+                            else/*link有值，则填充外部引用图片*/
                             {
-                                cm.replaceSelection("[![" + alt + "](" + url + altAttr + ")](" + link + altAttr + ")");
+                                /*这个插件这里应该是写错了。。。。*/
+                                //cm.replaceSelection("[![" + alt + "](" + url + altAttr + ")](" + link + altAttr + ")");
+
+                                cm.replaceSelection("![" + alt + "](" + link + altAttr + ")");
                             }
 
                             if (alt === "") {
