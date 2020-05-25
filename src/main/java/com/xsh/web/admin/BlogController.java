@@ -109,31 +109,5 @@ public class BlogController {
         return REDIRECT_LIST;
     }
 
-    /*Editormd前端规定了后台必须返回给前端一个map且形式为{"success":1,message:"上传成功","url":url}*/
-    @PostMapping(value="/uploadImg")
-    public @ResponseBody Map<String,Object> demo(@RequestParam(value = "editormd-image-file", required = false) MultipartFile file, HttpServletRequest request) {
-        Map<String,Object> resultMap = new HashMap<String,Object>();
-        System.out.println(request.getContextPath());
-        String fileName = file.getOriginalFilename();
-        System.out.println(fileName);
 
-        String pathAndFileName="E:/"+System.currentTimeMillis()+file.getOriginalFilename(); //上传文件保持的路径和文件名
-        File newFile=new File(pathAndFileName);
-        //String configImg="/image/"+System.currentTimeMillis()+file.getOriginalFilename();  //代理路径
-        //保存
-        try {
-            file.transferTo(newFile);
-            resultMap.put("success", 1);
-            resultMap.put("message", "上传成功！");
-            resultMap.put("url",pathAndFileName);  //markdown路径回显
-        } catch (Exception e) {
-            resultMap.put("success", 0);
-            resultMap.put("message", "上传失败！");
-            e.printStackTrace();
-        }
-        System.out.println(resultMap.get("success"));
-        return resultMap;
-
-
-    }
 }
