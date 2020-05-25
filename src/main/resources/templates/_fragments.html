@@ -11,6 +11,7 @@
   <link rel="stylesheet" href="../static/lib/tocbot/tocbot.css" th:href="@{/lib/tocbot/tocbot.css}">
   <link rel="stylesheet" href="../static/css/me.css" th:href="@{/css/me.css}">
   <link rel="stylesheet" href="../static/css/jquery.emoji.css" th:href="@{/css/jquery.emoji.css}">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome/css/font-awesome.min.css">
   <!--百度统计-->
   <script>
     var _hmt = _hmt || [];
@@ -89,16 +90,16 @@
 <!--底部footer-->
 <footer th:fragment="footer" class="ui inverted vertical segment m-padded-tb-massive">
   <!--引入网易云音乐播放器插件，固定右下角显示,歌单4864025307-->
-  <div id="netEasy-music" style="display:none;position: fixed;bottom: -45px;right: 280px;width: 0%;z-index:9999" >
+<!--  <div id="netEasy-music" style="display:none;position: fixed;bottom: -45px;right: 280px;width: 0%;z-index:9999" >
     <iframe frameborder="no" border="0" marginwidth="0"
             marginheight="0" width=280 height=300
             src="http://music.163.com/outchain/player?type=0&id=4864025307&auto=0">
     </iframe>
-    <!--引入天气预报插件-->
-    <!--https://cj.weather.com.cn/plugin/pc-->
+    &lt;!&ndash;引入天气预报插件&ndash;&gt;
+    &lt;!&ndash;https://cj.weather.com.cn/plugin/pc&ndash;&gt;
     <div id="weather-float-he"></div>
-  </div>
-
+  </div>-->
+  <div id="weather-float-he"></div>
   <div class="ui center aligned container">
     <div class="ui inverted divided stackable grid">
       <div class="three wide column">
@@ -164,6 +165,10 @@
 </footer>
 
 <th:block th:fragment="script">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.css">
+  <div class="aplayer" data-id="3778678" data-server="netease" data-type="playlist" data-fixed="true" data-autoplay="false"  data-volume="0.6" ></div>
+  <script src="http://cdn.jsdelivr.net/npm/aplayer@1.10.1/dist/APlayer.min.js"></script>
+  <script src="http://cdn.jsdelivr.net/npm/meting@1.2.0/dist/Meting.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/jquery@3.2/dist/jquery.min.js"></script>
   <script src="https://cdn.jsdelivr.net/semantic-ui/2.2.4/semantic.min.js"></script>
   <script src="//cdn.jsdelivr.net/npm/jquery.scrollto@2.1.2/jquery.scrollTo.min.js"></script>
@@ -212,8 +217,8 @@
     }else if(!browser.versions.mobile){ //非移动端，动态加载js和div
       //设置电脑端显示网易云音乐插件
       onload = function () {
-        var MusicDivShow = document.getElementById('netEasy-music');//获取指定div中的元素
-        MusicDivShow.style.display = 'block';//控制层显示
+        /*var MusicDivShow = document.getElementById('netEasy-music');//获取指定div中的元素
+        MusicDivShow.style.display = 'block';//控制层显示*/
       };
       var script1 = document.createElement('script');
       script1.type = 'text/javascript';
@@ -237,6 +242,12 @@
       script3.count = '200';
       script3.src = '//cdn.bootcss.com/canvas-nest.js/1.0.0/canvas-nest.min.js';
 
+      /*live-2D*/
+      var script5 = document.createElement('script');
+      script5.type = 'text/javascript';
+      script5.src = '\\js\\autoload.js';
+
+      $('body').append(script5);
       $('body').append(script1);
       $('body').append(script4);
       $('body').append(script2);

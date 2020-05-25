@@ -75,8 +75,8 @@ server:
     timeout: 864000 #session自动过期时间为10天，单位秒 60*60*24*10；记录登录状态
 
 #上传图片缓存路径，部署到linux需要换成linux路径并赋予读写权限
-baseUploadUrl: /usr/java/qiniu_temp/
-#baseUploadUrl: d://qiniu_temp/
+#baseUploadUrl: /usr/java/qiniu_temp/
+baseUploadUrl: d://qiniu_temp/
 
 #QQ登录授权配置,QQ互联中提供的 appid 和 appkey
 qq:
