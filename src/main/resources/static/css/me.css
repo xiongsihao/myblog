@@ -4,6 +4,10 @@
     height: 780px;
 }
 
+/*修改后台markdown编辑器上传图片弹框大小*/
+.editormd-dialog{
+    height: 400px !important;
+}
 #open_mail {
     margin-top:30px
 }
