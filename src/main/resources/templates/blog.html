@@ -38,7 +38,11 @@
     </a>
   </nav>
 
+
   <!--中间内容-->
+  <input type="hidden" id="blogTitle" th:value="${blog.title}">
+  <input type="hidden" id="firstPicture" th:value="${blog.firstPicture}">
+  <input type="hidden" id="blogId" th:value="${blog.id}">
   <div id="waypoint" class="m-container m-padded-tb-big animated fadeIn">
     <div class="ui container">
       <div class="ui top attached segment">
@@ -795,6 +799,10 @@ h5,h6{font-size:1em;}
         basePath: '/images/emoji',
         icons: emojiLists
       });
+
+      localStorage.setItem("blogFirstPicture",document.getElementById("firstPicture").value);
+      localStorage.setItem("blogTitle",document.getElementById("blogTitle").value);
+      localStorage.setItem("blogId",document.getElementById("blogId").value);
     };
 
     $('.menu.toggle').click(function () {
@@ -844,7 +852,7 @@ h5,h6{font-size:1em;}
       colorLight : "#ffffff",
       correctLevel : QRCode.CorrectLevel.H
     });
-    
+
     $('#toTop-button').click(function () {
       $(window).scrollTo(0,500);
     });
@@ -866,14 +874,14 @@ h5,h6{font-size:1em;}
     //评论表单验证
     $('.ui.form').form({
       fields: {
-/*        title: {
-          identifier: 'content',
-          rules: [{
-            type: 'empty',
-            prompt: '请输入评论内容'
-          }
-          ]
-        },*/
+        /*        title: {
+                  identifier: 'content',
+                  rules: [{
+                    type: 'empty',
+                    prompt: '请输入评论内容'
+                  }
+                  ]
+                },*/
         content: {
           identifier: 'nickname',
           rules: [{
@@ -907,7 +915,7 @@ h5,h6{font-size:1em;}
       }
 
     });
-    
+
     function postData() {
       $("#comment-container").load(/*[[@{/comments}]]*/"",{
         "parentComment.id" : $("[name='parentComment.id']").val(),
@@ -942,12 +950,11 @@ h5,h6{font-size:1em;}
     /*QQ分享*/
     function shareQQ() {
       var param = {
-        url: encodeURIComponent(window.location.href),
+        url: 'http://xiongsihao.com/blog/'+localStorage.getItem("blogId"),
         desc: '博客很好很详细，值得一看!',
-        title : localStorage.getItem("blogTitle"),
+        title : localStorage.getItem("blogTitle")+"  from XSH_博客",
         summary : '我分享了一篇博客，快来看吧！',
         pics : localStorage.getItem("blogFirstPicture"),
-        //flash : '',
         sharesource:'qq',
         site: 'XSH_Blog'
       };
@@ -955,15 +962,15 @@ h5,h6{font-size:1em;}
       for (var i in param) {
         s.push(i + '=' + encodeURIComponent(param[i] || ''));
       }
-      //var targetUrl = "https://connect.qq.com/widget/shareqq/iframe_index.html?" + s.join('&') ;
-      var targetUrl = "http://connect.qq.com/widget/shareqq/index.html?" + s.join('&') ;
+      var targetUrl = "https://connect.qq.com/widget/shareqq/iframe_index.html?" + s.join('&') ;
+      //var targetUrl = "http://connect.qq.com/widget/shareqq/index.html?" + s.join('&') ;
       //window.location.href=targetUrl;
-      window.open(targetUrl, 'qq', 'height=800, width=800');
+      window.open(targetUrl, 'qq', 'height=450, width=600');
     }
     /*分享QQ空间*/
     function shareQQZone() {
       var param = {
-        url: window.location.href,
+        url: 'http://xiongsihao.com/blog/'+localStorage.getItem("blogId"),
         sharesource: 'qzone',
         title : localStorage.getItem("blogTitle"),
         summary : '我分享了一篇博客，快来看吧！',
