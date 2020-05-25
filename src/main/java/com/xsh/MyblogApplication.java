@@ -26,7 +26,7 @@ public class MyblogApplication extends SpringBootServletInitializer implements W
 /*     @Bean
      public EmbeddedServletContainerCustomizer containerCustomizer(){
                 return container -> {
-                  container.setSessionTimeout(2592000);*//*单位为S， 60*60*24*30*//*
+                  container.setSessionTimeout(2592000);*//*单位为S， 60*60*24*30* .//*
             };
          }*/
 }
