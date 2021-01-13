@@ -15,6 +15,8 @@ spring:
     virtual-host: /sms
   redis:
     host: 127.0.0.1
+    password:
+    port: 6379
   #邮件参数配置
 #  mail:
 #      # 163邮箱配置
@@ -99,3 +101,6 @@ sms:
   signName: X博客 # 签名名称
   verifyCodeTemplate: SMS_183195163 # 模板名称
 
+repeatRequestParam:
+  cacheExpireTime: 60 #本地缓存有效期 单位秒
+  requestNum: 10 #设置访问多少次为频繁请求，即60秒内重复访问一个接口地址超过10次，就将ip加入黑名单

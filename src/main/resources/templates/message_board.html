@@ -285,6 +285,9 @@
             cache:true,//保留缓存数据
             type:"POST",
             url:"/POSTMessages",
+            headers:{
+                'x-source':"message-boardPost"
+            },
             data:{
                 "parentMessage.id" : $("[name='parentMessage.id']").val(),
                 //"openid" : $("[name='openidValue']").val(),
@@ -295,7 +298,9 @@
             },
             async:true,//异步
             error:function(request){
-                alert("服务器出现了一个未知的错误");
+                alert(JSON.stringify(request.responseJSON));
+                console.log(JSON.stringify(request.responseJSON.message));
+                //alert("服务器出现了一个未知的错误");
             },
             success:function(data){
                 clearContent();

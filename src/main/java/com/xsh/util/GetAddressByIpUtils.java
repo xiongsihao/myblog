@@ -2,7 +2,9 @@ package com.xsh.util;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.xsh.pojo.HttpResult;
 
+import javax.servlet.http.HttpServletRequest;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -113,5 +115,108 @@ public class GetAddressByIpUtils {
             e.printStackTrace();
         }
         return jsonStr;
+    }
+
+
+    public final static String getIpAddress(HttpServletRequest request)
+            throws IOException {
+        // 获取请求主机IP地址,如果通过代理进来，则透过防火墙获取真实IP地址
+
+        String ip = request.getHeader("x-forwarded-for");
+
+        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+            if (ip == null || ip.length() == 0
+                    || "unknown".equalsIgnoreCase(ip)) {
+                ip = request.getHeader("Proxy-Client-IP");
+            }
+            if (ip == null || ip.length() == 0
+                    || "unknown".equalsIgnoreCase(ip)) {
+                ip = request.getHeader("WL-Proxy-Client-IP");
+            }
+            if (ip == null || ip.length() == 0
+                    || "unknown".equalsIgnoreCase(ip)) {
+                ip = request.getHeader("HTTP_CLIENT_IP");
+            }
+            if (ip == null || ip.length() == 0
+                    || "unknown".equalsIgnoreCase(ip)) {
+                ip = request.getHeader("HTTP_X_FORWARDED_FOR");
+            }
+            if (ip == null || ip.length() == 0
+                    || "unknown".equalsIgnoreCase(ip)) {
+                ip = request.getRemoteAddr();
+            }
+        } else if (ip.length() > 15) {
+            String[] ips = ip.split(",");
+            for (int index = 0; index < ips.length; index++) {
+                String strIp = (String) ips[index];
+                if (!("unknown".equalsIgnoreCase(strIp))) {
+                    ip = strIp;
+                    break;
+                }
+            }
+        }
+
+        return ip;
+    }
+
+    /***
+     * 获取客户端IP地址;通过Nginx获取;X-Real-IP,
+     * @param request
+     * @return
+     *
+     * nginx需要增加以下配置：
+     *          proxy_set_header  Host $http_host;
+     * 			proxy_set_header X-Real-IP  $remote_addr;
+     * 			proxy_set_header  X-Forwarded-For $proxy_add_x_forwarded_for;
+     * 			proxy_set_header REMOTE-HOST $remote_addr;
+     */
+    public static String getClientIPForNginx(HttpServletRequest request) {
+        String fromSource = "X-Real-IP";
+        String ip = request.getHeader("X-Real-IP");
+        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+            ip = request.getHeader("X-Forwarded-For");
+            fromSource = "X-Forwarded-For";
+        }
+        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+            ip = request.getHeader("Proxy-Client-IP");
+            fromSource = "Proxy-Client-IP";
+        }
+        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+            ip = request.getHeader("WL-Proxy-Client-IP");
+            fromSource = "WL-Proxy-Client-IP";
+        }
+        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+            ip = request.getRemoteAddr();
+            fromSource = "request.getRemoteAddr";
+        }
+        System.out.println("App Client IP: "+ip+", fromSource: "+fromSource);
+        return ip;
+    }
+    //解析ip地址
+    public static String getInfoByIp(String ip){
+        HttpClientUtil apiService=new HttpClientUtil();
+        String url = "http://whois.pconline.com.cn/ipJson.jsp";
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.put("ip",ip);//传入ip地址
+        map.put("json","true");
+        HttpResult httpResult = null;
+        try {
+            httpResult = apiService.doGet(url,map);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        if(httpResult.getCode()==200){
+            System.out.println("SUCCESS");
+        }
+        JSONObject jsonObject = JSONObject.parseObject(httpResult.getBody());
+
+        String pro = jsonObject.getString("pro");
+        String city = jsonObject.getString("city");
+        String addr = jsonObject.getString("addr");
+        String ip_a = jsonObject.getString("ip");
+
+        //String response="解析访问ip【"+ip+"】信息，解析结果："+httpResult.getBody();
+        String response="解析访问ip【"+ip_a+"】信息，解析结果："+pro+addr;
+        return response;
     }
 }

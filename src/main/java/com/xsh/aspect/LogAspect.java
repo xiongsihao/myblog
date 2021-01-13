@@ -19,6 +19,8 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.xsh.util.GetAddressByIpUtils.getClientIPForNginx;
+
 /**
  * @author : xsh
  * @create : 2020-07-30 - 21:37
@@ -41,7 +43,9 @@ public class LogAspect {
         HttpServletRequest request = attributes.getRequest();
         Object result = proceedingJoinPoint.proceed();
         RequestInfo requestInfo = new RequestInfo();
-        requestInfo.setIp(request.getRemoteAddr());
+        String ip = getClientIPForNginx(request);
+        requestInfo.setIp(ip);
+        //requestInfo.setIp(request.getRemoteAddr());
         requestInfo.setUrl(request.getRequestURL().toString());
         requestInfo.setHttpMethod(request.getMethod());
         requestInfo.setClassMethod(String.format("%s.%s", proceedingJoinPoint.getSignature().getDeclaringTypeName(),

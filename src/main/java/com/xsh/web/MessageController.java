@@ -1,5 +1,6 @@
 package com.xsh.web;
 
+import com.xsh.annotations.CheckRepeatRequest;
 import com.xsh.pojo.Message;
 import com.xsh.service.MessageService;
 import org.apache.commons.lang3.StringUtils;
@@ -38,6 +39,7 @@ public class MessageController {
         return "message_board";
     }
     @PostMapping("/POSTMessages")
+    @CheckRepeatRequest
     public String post(Message message, HttpSession session) {
         String loginStatus = (String) session.getAttribute("loginStatus");
         if (loginStatus != null) {
@@ -82,6 +84,7 @@ public class MessageController {
     }
 
     @RequestMapping(value ="/Message" ,method = RequestMethod.GET)
+    @CheckRepeatRequest
     public String message(@RequestParam(value = "key",required = false)String key,
                           @RequestParam(value = "page",defaultValue = "1")Integer page,
                           @RequestParam(value = "rows",defaultValue = "10")Integer rows,

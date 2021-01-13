@@ -9,6 +9,13 @@
 
 # 新增
 
+- 基于redis实现接口防刷校验，自定义注解@CheckRepeatRequest，在对应的接口上加上此注解即可防止频繁访问接口，可防止httpclient频繁请求刷留言板；RequestCache为本地缓存配置，默认缓存60秒；
+  - 配置文件application.yml内参数repeatRequestParam为重复请求配置参数
+  - cacheExpireTime: 60 #本地缓存有效期 单位秒
+  - requestNum: 10 #设置访问多少次为频繁请求
+  - 即60秒内重复访问一个接口地址超过10次，就将ip加入黑名单
+  - 测试频繁请求路径： /testRepeatRequest
+
 - 前端博客美化效果：雪花效果，动态背景线条效果，点击显示文字效果
 
   - 雪花效果相关配置：
@@ -124,6 +131,8 @@
 - 数据库，为防止字段与原项目冲突，最好新建一个空数据库，再运行此项目会自动建表和字段
 - 使用qq登录，github登录，图片上传，验证码发送功能，需申请对应账号并填入yml配置文件
 - 博客后台编辑器内图片上传功能需要申请好七牛云账号，或自己重写上传文件方法，直接上传到项目static路径内
+- 配置application.yml内redis连接参数
+- 后台管理账号需手动去t_user表内条件一条数据，密码需使用md5格式加密后的，util.MD5Utils类下有转换的方法
 
 如出现任何问题，欢迎[点击此处](http://xiongsihao.com/Messages)留言
 
