@@ -4,14 +4,14 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title th:replace="${title}">博客详情</title>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/semantic-ui/2.2.4/semantic.min.css">
+  <link rel="stylesheet" href="../static/css/semantic.min.css" th:href="@{/css/semantic.min.css}">
   <link rel="stylesheet" href="../static/css/typo.css" th:href="@{/css/typo.css}">
   <link rel="stylesheet" href="../static/css/animate.css" th:href="@{/css/animate.css}">
   <link rel="stylesheet" href="../static/lib/prism/prism.css" th:href="@{/lib/prism/prism.css}">
   <link rel="stylesheet" href="../static/lib/tocbot/tocbot.css" th:href="@{/lib/tocbot/tocbot.css}">
   <link rel="stylesheet" href="../static/css/me.css" th:href="@{/css/me.css}">
   <link rel="stylesheet" href="../static/css/jquery.emoji.css" th:href="@{/css/jquery.emoji.css}">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome/css/font-awesome.min.css">
+  <link src="../../static/css/fontawesome.min.css" th:src="@{/css/fontawesome.min.css}"></link>
   <!--百度统计-->
   <script>
     var _hmt = _hmt || [];
@@ -165,13 +165,13 @@
 </footer>
 
 <th:block th:fragment="script">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.css">
+  <link src="../../static/css/APlayer.min.css" th:src="@{/css/APlayer.min.css}"></link>
   <div class="aplayer" data-id="3778678" data-server="netease" data-type="playlist" data-fixed="true" data-autoplay="false"  data-volume="0.6" ></div>
-  <script src="http://cdn.jsdelivr.net/npm/aplayer@1.10.1/dist/APlayer.min.js"></script>
-  <script src="http://cdn.jsdelivr.net/npm/meting@1.2.0/dist/Meting.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2/dist/jquery.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/semantic-ui/2.2.4/semantic.min.js"></script>
-  <script src="//cdn.jsdelivr.net/npm/jquery.scrollto@2.1.2/jquery.scrollTo.min.js"></script>
+  <script src="../static/js/APlayer.min.js" th:src="@{/js/APlayer.min.js}"></script>
+  <script src="../static/js/Meting.min.js" th:src="@{/js/Meting.min.js}"></script>
+  <script src="../../static/js/jquery.js" th:src="@{/js/jquery.js}"></script>
+  <script src="../static/js/semantic.min.js" th:src="@{/js/semantic.min.js}"></script>
+  <script src="../static/js/jquery.scrollTo.min.js" th:src="@{/js/jquery.scrollTo.min.js}"></script>
   <script src="../static/lib/prism/prism.js" th:src="@{/lib/prism/prism.js}"></script>
   <script src="../static/lib/tocbot/tocbot.min.js" th:src="@{/lib/tocbot/tocbot.min.js}"></script>
   <script src="../static/lib/qrcode/qrcode.min.js" th:src="@{/lib/qrcode/qrcode.min.js}"></script>
@@ -249,7 +249,7 @@
 
       $('body').append(script5);
       $('body').append(script1);
-      $('body').append(script4);
+      //$('body').append(script4);
       $('body').append(script2);
       $('body').append(script3);
     }

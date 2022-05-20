@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>博客详情</title>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/semantic-ui/2.2.4/semantic.min.css">
+  <link rel="stylesheet" href="../static/css/semantic.min.css" th:href="@{/css/semantic.min.css}">
   <link rel="stylesheet" href="../static/css/typo.css">
   <link rel="stylesheet" href="../static/css/animate.css">
   <link rel="stylesheet" href="../static/lib/prism/prism.css">
@@ -707,9 +707,9 @@ h5,h6{font-size:1em;}
 
   </footer>
 
-  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2/dist/jquery.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/semantic-ui/2.2.4/semantic.min.js"></script>
-  <script src="//cdn.jsdelivr.net/npm/jquery.scrollto@2.1.2/jquery.scrollTo.min.js"></script>
+  <script src="../../static/js/jquery.js" th:src="@{/js/jquery.js}"></script>
+  <script src="../static/js/semantic.min.js" th:src="@{/js/semantic.min.js}"></script>
+  <script src="../static/js/jquery.scrollTo.min.js" th:src="@{/js/jquery.scrollTo.min.js}"></script>
   <script src="../static/lib/prism/prism.js" th:src="@{/lib/prism/prism.js}"></script>
   <script src="../static/lib/tocbot/tocbot.min.js" th:src="@{/lib/tocbot/tocbot.min.js}"></script>
   <script src="../static/lib/qrcode/qrcode.min.js" th:src="@{/lib/qrcode/qrcode.min.js}"></script>
@@ -778,7 +778,7 @@ h5,h6{font-size:1em;}
       script3.src = '//cdn.bootcss.com/canvas-nest.js/1.0.0/canvas-nest.min.js';
 
 
-      $('body').append(script4);
+      //$('body').append(script4);
       $('body').append(script2);
       $('body').append(script3);
     }
