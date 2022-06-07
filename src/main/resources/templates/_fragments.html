@@ -11,7 +11,8 @@
   <link rel="stylesheet" href="../static/lib/tocbot/tocbot.css" th:href="@{/lib/tocbot/tocbot.css}">
   <link rel="stylesheet" href="../static/css/me.css" th:href="@{/css/me.css}">
   <link rel="stylesheet" href="../static/css/jquery.emoji.css" th:href="@{/css/jquery.emoji.css}">
-  <link src="../../static/css/fontawesome.min.css" th:src="@{/css/fontawesome.min.css}"></link>
+  <link rel="stylesheet" src="../../static/css/fontawesome.min.css" th:href="@{/css/fontawesome.min.css}">
+  <link rel="stylesheet" href="../static/css/APlayer.min.css" th:href="@{/css/APlayer.min.css}">
   <!--百度统计-->
   <script>
     var _hmt = _hmt || [];
@@ -165,8 +166,8 @@
 </footer>
 
 <th:block th:fragment="script">
-  <link src="../../static/css/APlayer.min.css" th:src="@{/css/APlayer.min.css}"></link>
-  <div class="aplayer" data-id="3778678" data-server="netease" data-type="playlist" data-fixed="true" data-autoplay="false"  data-volume="0.6" ></div>
+  <!--data-fixed歌词是否居中显示， data-id网易云歌单id,data-order为random表示随机播放列表音乐,data-autoplay是否自动播放,data-volume默认音量-->
+  <div id="player" class="aplayer aplayer-withlist aplayer-fixed" data-id="3778678" data-server="netease" data-autoplay="true" data-type="playlist"  data-fixed="true" data-volume="0.6" data-listfolded="true" data-theme="#2D8CF0"></div>
   <script src="../static/js/APlayer.min.js" th:src="@{/js/APlayer.min.js}"></script>
   <script src="../static/js/Meting.min.js" th:src="@{/js/Meting.min.js}"></script>
   <script src="../../static/js/jquery.js" th:src="@{/js/jquery.js}"></script>
