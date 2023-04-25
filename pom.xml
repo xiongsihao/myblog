@@ -40,12 +40,6 @@
             <groupId>com.sun.mail</groupId>
             <artifactId>javax.mail</artifactId>
             <version>RELEASE</version>
-            <exclusions>
-                 <exclusion>
-                   <artifactId>activation</artifactId>
-                   <groupId>javax.activation</groupId>
-                 </exclusion>
-            </exclusions>
         </dependency>
         <!--redis-->
         <dependency>
