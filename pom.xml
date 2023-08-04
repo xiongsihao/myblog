@@ -64,12 +64,6 @@
             <version>2.6.2</version>
             <scope>compile</scope>
         </dependency>
-        <dependency>
-            <groupId>com.qiniu</groupId>
-            <artifactId>happy-dns-java</artifactId>
-            <version>0.1.4</version>
-            <scope>compile</scope>
-        </dependency>
         <!--阿里云发送短信服务jar包-->
         <dependency>
             <groupId>com.aliyun</groupId>
@@ -101,12 +95,32 @@
             <groupId>org.apache.struts.xwork</groupId>
             <artifactId>xwork-core</artifactId>
             <version>2.3.37</version>
+            <exclusions>
+                 <exclusion>
+                   <artifactId>asm</artifactId>
+                   <groupId>asm</groupId>
+                 </exclusion>
+                 <exclusion>
+                   <artifactId>asm-commons</artifactId>
+                   <groupId>asm</groupId>
+                 </exclusion>
+                 <exclusion>
+                   <artifactId>asm-tree</artifactId>
+                   <groupId>asm</groupId>
+                 </exclusion>
+            </exclusions>
         </dependency>
         <!-- https://mvnrepository.com/artifact/com.alibaba/fastjson -->
         <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>fastjson</artifactId>
             <version>1.2.57</version>
+            <exclusions>
+                 <exclusion>
+                   <artifactId>core</artifactId>
+                   <groupId>net.sf.trove4j</groupId>
+                 </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>com.atlassian.commonmark</groupId>
@@ -130,6 +144,12 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>
+            <exclusions>
+                 <exclusion>
+                   <artifactId>tomcat-juli</artifactId>
+                   <groupId>org.apache.tomcat</groupId>
+                 </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -158,6 +178,12 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
+            <exclusions>
+                 <exclusion>
+                   <artifactId>commons-logging</artifactId>
+                   <groupId>commons-logging</groupId>
+                 </exclusion>
+            </exclusions>
         </dependency>
 
         <!--test，获取wxfile图片名字-->
@@ -165,6 +191,16 @@
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>httpclient</artifactId>
             <version>4.5.1</version>
+            <exclusions>
+                 <exclusion>
+                   <artifactId>commons-logging</artifactId>
+                   <groupId>commons-logging</groupId>
+                 </exclusion>
+                 <exclusion>
+                   <artifactId>commons-codec</artifactId>
+                   <groupId>commons-codec</groupId>
+                 </exclusion>
+            </exclusions>
         </dependency>
 
         <dependency>
@@ -186,6 +222,28 @@
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
             <version>24.0-jre</version>
+            <exclusions>
+                 <exclusion>
+                   <artifactId>j2objc-annotations</artifactId>
+                   <groupId>com.google.j2objc</groupId>
+                 </exclusion>
+                 <exclusion>
+                   <artifactId>animal-sniffer-annotations</artifactId>
+                   <groupId>org.codehaus.mojo</groupId>
+                 </exclusion>
+                 <exclusion>
+                   <artifactId>jsr305</artifactId>
+                   <groupId>com.google.code.findbugs</groupId>
+                 </exclusion>
+                 <exclusion>
+                   <artifactId>error_prone_annotations</artifactId>
+                   <groupId>com.google.errorprone</groupId>
+                 </exclusion>
+                 <exclusion>
+                   <artifactId>checker-compat-qual</artifactId>
+                   <groupId>org.checkerframework</groupId>
+                 </exclusion>
+             </exclusions>
         </dependency>
     </dependencies>
 
